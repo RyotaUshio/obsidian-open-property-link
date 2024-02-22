@@ -5,11 +5,13 @@ import OpenPropertyLinkPlugin from 'main';
 export interface OpenPropertyLinkSettings {
 	properties: string;
 	howToOpen: PaneType | boolean;
+	focusIfAlreadyOpened: boolean;
 }
 
 export const DEFAULT_SETTINGS: OpenPropertyLinkSettings = {
 	properties: '',
 	howToOpen: false,
+	focusIfAlreadyOpened: false,
 };
 
 // Inspired by https://stackoverflow.com/a/50851710/13613783
@@ -25,7 +27,7 @@ export class OpenPropertyLinkSettingTab extends PluginSettingTab {
 
 		new Setting(this.containerEl)
 			.setName('Properties')
-			.setDesc('A comma-separeted list of property names. If either of these properties are found in the opened file and the value is a valid internal link, the link will be opened at the same time. If the linked file is already opened, nothing will happen.')
+			.setDesc('A comma-separeted list of property names. If either of these properties are found in the opened file and the value is a valid internal link, the link will be opened at the same time. If the linked file is already opened, nothing will happen unless the "Reveal the linked file if it is already opened" option is turned on.')
 			.addText((text) => {
 				text.inputEl.size = 30;
 				text.setValue(this.plugin.settings.properties)
@@ -52,5 +54,18 @@ export class OpenPropertyLinkSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					});
 			});
+
+		new Setting(this.containerEl)
+			.setName('Reveal the linked file if it is already opened')
+			.setDesc('Turning this on will result in a pretty annoying behavior, but it is useful if you combine this plugin with PDF++.')
+			.addToggle((toggle) => {
+				toggle
+					.setValue(this.plugin.settings.focusIfAlreadyOpened)
+					.onChange(async (value) => {
+						this.plugin.settings.focusIfAlreadyOpened = value;
+						await this.plugin.saveSettings();
+					});
+			});
+
 	}
 }

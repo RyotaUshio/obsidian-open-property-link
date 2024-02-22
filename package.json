@@ -1,6 +1,6 @@
 {
     "name": "obsidian-open-property-link",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "An Obsidian.md plugin that auto-opens links contained in specified properties.",
     "scripts": {
         "dev": "node esbuild.config.mjs",

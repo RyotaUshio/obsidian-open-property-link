@@ -78,6 +78,11 @@ export default class OpenPropertyLinkPlugin extends Plugin {
 
 		if (!existingLeaf) {
 			await this.app.workspace.openLinkText(linktext, sourcePath, newLeaf);
+			return;
+		}
+
+		if (this.settings.focusIfAlreadyOpened) {
+			this.app.workspace.revealLeaf(existingLeaf);
 		}
 	}
 }
